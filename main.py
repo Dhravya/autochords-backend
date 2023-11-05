@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from os import environ as env
 from helpers import search
 from helpers import extract_chords
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
@@ -22,6 +23,14 @@ connection = pymysql.connect(
 )
 
 cursor = connection.cursor()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[],
+    allow_credentials=False,
+    allow_methods=[],
+    allow_headers=[],
+)
 
 
 def get_user_chords(song_name: str, recording: bytes):
