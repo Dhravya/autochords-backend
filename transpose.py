@@ -69,6 +69,7 @@ key_regex = re.compile(r"[ABCDEFG][#b]?")
 
 
 def get_index_from_key(source_key):
+    source_key = source_key.replace("M", "")
     for key_names in key_list:
         if source_key in key_names:
             return key_list.index(key_names)
