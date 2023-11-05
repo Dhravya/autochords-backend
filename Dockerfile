@@ -10,7 +10,7 @@ WORKDIR /usr/src/app
 
 # Install FFmpeg
 RUN apt-get install -y ffmpeg \
-    && apt-get install -y libsndfile-dev \
+    && apt-get install -y libsndfile1 \
     && pip install audioread \
     && rm -rf /var/lib/apt/lists/*
 
