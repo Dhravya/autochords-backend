@@ -198,7 +198,7 @@ async def upload_song(file: UploadFile = UploadFile(...), user_email: str = Quer
             content={"error": "Only mp3 files are supported"}, status_code=400
         )
 
-    y, sr = librosa.load("recording.wav")
+    y, sr = librosa.load(file.file)
     y_harmonic, y_percussive = librosa.effects.hpss(y)
     unebarque_fsharp_maj = Tonal_Fragment(y_harmonic, sr, tend=22)
 
