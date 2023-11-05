@@ -26,10 +26,8 @@ cursor = connection.cursor()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[],
-    allow_credentials=False,
-    allow_methods=[],
-    allow_headers=[],
+    allow_origins=["http://localhost", "https://autochords.co"],
+    allow_credentials=False
 )
 
 
