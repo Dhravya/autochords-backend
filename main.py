@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 import pymysql
 from dotenv import load_dotenv
 from os import environ as env
-from googlesearch import search
+from helpers import search
 from helpers import extract_chords
 
 load_dotenv()
@@ -218,4 +218,4 @@ if __name__ == "__main__":
 
     import uvicorn
 
-    uvicorn.run(app, host='0.0.0.0')
+    uvicorn.run(app)

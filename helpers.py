@@ -2,8 +2,18 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import json
-from googlesearch import search
 
+def search(term):
+    escaped_term = term.replace(" ", "+")
+
+    url ="https://www.ultimate-guitar.com/search.php?search_type=title&order=&value=" + escaped_term
+
+    resp = requests.get(url)
+    links = re.findall(r"https://tabs.ultimate-guitar.com/tab/.*?;", resp.text)
+
+    links = [i.replace("&quot;", "") for i in links][0:5]
+
+    return links
 
 def get_song_key(song_name: str):
     query = song_name + "site:songbpm.com"
