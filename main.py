@@ -57,7 +57,7 @@ def split_chord(chord):
 
     if chord_type == 'm':
         chord_type = 'minor'
-    elif chord_type == '':
+    elif chord_type == '' or chord_type == 'maj' or chord_type == 'M':
         chord_type = 'major'
 
     return base_chord.replace("/", ""), chord_type
@@ -77,6 +77,10 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
     print(song_name_number)
     song = get_song_data(song_name, song_name_number)
 
+    with open("song.json", "w") as f:
+        import json
+        json.dump(song, f, indent=2)
+
     if song is None:
         return JSONResponse(
             content={"error": "Song not found. Please try again with a different song."},
@@ -86,6 +90,7 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
     print(song)
 
     original_chords = song["store"]["page"]["data"]["tab_view"]["wiki_tab"]["content"]
+   
 
     final_chords = original_chords
 
@@ -107,8 +112,12 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
     if 'capo' in song["store"]["page"]["data"]["tab_view"]["meta"]:
         capo_position = song["store"]["page"]["data"]["tab_view"]["meta"]["capo"]
 
-    song_name = song["store"]["page"]["data"]["tab_view"]["versions"][0]['song_name']
-    artist_name = song["store"]["page"]["data"]["tab_view"]["versions"][0]['artist_name']
+    try:
+        song_name = song["store"]["page"]["data"]["tab_view"]["versions"][0]['song_name']
+        artist_name = song["store"]["page"]["data"]["tab_view"]["versions"][0]['artist_name']
+    except IndexError:
+        song_name = song["store"]["page"]["data"]["tab"]["song_name"]
+        artist_name = song["store"]["page"]["data"]["tab"]["artist_name"]
 
     # https://tombatossals.github.io/react-chords/media/guitar/chords/Ab/minor/1.svg
     # Get the URL of all the chord images
