@@ -64,7 +64,7 @@ def split_chord(chord):
         chord_type = 'major'
 
     # Other chord types like diminished, augmented, etc., could be added here
-    base_chord.replace("Csharp", "D").replace("Dsharp", "Eb").replace("Fsharp", "G").replace("Gsharp", "Ab").replace("Asharp", "Bb")
+    base_chord = base_chord.replace("Csharp", "D").replace("Dsharp", "Eb").replace("Fsharp", "G").replace("Gsharp", "Ab").replace("Asharp", "Bb")
 
     return base_chord, chord_type
 
