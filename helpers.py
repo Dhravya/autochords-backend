@@ -39,8 +39,7 @@ def get_song_data(song_name: str, result_num: int = 1):
 
     result = search(query)
 
-    for i in result:
-        song_url = i
+    song_url = result[0]
 
     answer = requests.get(song_url)
 

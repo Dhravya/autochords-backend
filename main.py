@@ -81,13 +81,19 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
     final_chords = original_chords
 
     progressions = extract_chords(original_chords)
+    print(progressions)
 
-    original_key = progressions[list(progressions.keys())[0]][0]
+    original_key = None
 
-    with open("data.json", "w") as f:
-        import json
-        json.dump(song, f, indent=2)
+    # First occurance of a chord in the progressions recursively
+    # {'Coda': [], 'Intro': ['G']
+    # Here, the first occurance of a chord is G
 
+    for section, chords in progressions.items():
+        if len(chords) > 0:
+            original_key = chords[0]
+            break
+ 
     capo_position = 0
     if 'capo' in song["store"]["page"]["data"]["tab_view"]["meta"]:
         capo_position = song["store"]["page"]["data"]["tab_view"]["meta"]["capo"]
@@ -118,7 +124,7 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
 
     if key:
         transposed_chords = transpose_progressions(
-            progressions, progressions[list(progressions.keys())[0]][0], key
+            progressions, original_key, key
         )
 
         updated_chords = replace_chords_with_transposed(
