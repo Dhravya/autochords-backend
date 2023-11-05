@@ -32,6 +32,36 @@ app.add_middleware(
     allow_headers=[],
 )
 
+
+def split_chord(chord):
+    # Define a list of base chords
+    BASE_CHORDS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+
+    # Handle the slash chords by taking only the part before the slash
+    chord = chord.split('/')[0]
+
+    # Replace '#' with 'sharp' in the chord name
+    chord = chord.replace('#', 'sharp')
+
+    # Find the base chord and the chord type
+    base_chord = None
+    chord_type = ''
+
+    # Loop through each base chord to find the base chord in the input chord
+    for base in BASE_CHORDS:
+        if chord.startswith(base):
+            base_chord = base
+            # Anything after the base chord is considered the chord type
+            chord_type = chord[len(base):]
+            break
+
+    # If no base chord was found, return the original chord as the type
+    if not base_chord:
+        chord_type = chord
+
+    return base_chord, chord_type
+
+
 @app.get("/get_chords")
 async def get_chords(song_name: str = Query(...), username: str = Query(...)):
     # Ensure the uploaded file is not empty
@@ -82,9 +112,10 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
 
     for section, chords in progressions.items():
         for chord in chords:
-            chord_name = chord.replace("m", "").replace("sus", "").replace("add", "")
-            chord_type = "minor" if "m" in chord else "major"
-            chord_url = f"https://tombatossals.github.io/react-chords/media/guitar/chords/{chord_name.split('/')[0]}/{chord_type}/1.svg"
+
+            chord_name, chord_type = split_chord(chord)
+            
+            chord_url = f"https://tombatossals.github.io/react-chords/media/guitar/chords/{chord_name}/{chord_type}/1.svg"
             
             object = {
                 "name": chord,
