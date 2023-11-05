@@ -32,38 +32,6 @@ app.add_middleware(
     allow_headers=[],
 )
 
-
-def get_user_chords(song_name: str, recording: bytes):
-    """This is the main function.
-    It accepts song_name and sample recording as an input.
-    Then, it extracts the chords of the song, tranposes it
-    to the recording's key and returns the updated chords with lyrics.
-    """
-
-    progressions = get_song_chords(song_name)
-
-    y, sr = librosa.load("recording.wav")
-    y_harmonic, y_percussive = librosa.effects.hpss(y)
-    unebarque_fsharp_maj = Tonal_Fragment(y_harmonic, sr, tend=22)
-
-    song_key = progressions[list(progressions.keys())[0]][0]
-    transposed_chords = transpose_progressions(
-        progressions, song_key, unebarque_fsharp_maj.get_max_key()
-    )
-
-    song_data = get_song_data(song_name)
-    original_text = song_data["store"]["page"]["data"]["tab_view"]["wiki_tab"][
-        "content"
-    ]
-
-    # Replace the original chords with the transposed chords
-    updated_text = replace_chords_with_transposed(
-        original_text, progressions, transposed_chords
-    )
-
-    return updated_text
-
-
 @app.get("/get_chords")
 async def get_chords(song_name: str = Query(...), username: str = Query(...)):
     # Ensure the uploaded file is not empty
@@ -74,7 +42,8 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
     if not cursor.rowcount == 0:
         key = cursor.fetchone()[0]
 
-    song = get_song_data(song_name)
+    song_name_number = song_name.split(" ")[-1]
+    song = get_song_data(song_name, song_name_number)
 
     original_chords = song["store"]["page"]["data"]["tab_view"]["wiki_tab"]["content"]
 
@@ -113,7 +82,7 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
         for chord in chords:
             chord_name = chord.replace("m", "").replace("sus", "").replace("add", "")
             chord_type = "minor" if "m" in chord else "major"
-            chord_url = f"https://tombatossals.github.io/react-chords/media/guitar/chords/{chord_name}/{chord_type}/1.svg"
+            chord_url = f"https://tombatossals.github.io/react-chords/media/guitar/chords/{chord_name.split('/')[0]}/{chord_type}/1.svg"
             
             object = {
                 "name": chord,

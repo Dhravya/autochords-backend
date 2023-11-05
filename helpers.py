@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import re
 import json
 
-def search(term):
+def search(term, song_number: str = ""):
     escaped_term = term.replace(" ", "+")
 
     url ="https://www.ultimate-guitar.com/search.php?search_type=title&order=&value=" + escaped_term
@@ -12,6 +12,9 @@ def search(term):
     links = re.findall(r"https://tabs.ultimate-guitar.com/tab/.*?;", resp.text)
 
     links = [i.replace("&quot;", "") for i in links][0:5]
+
+    if song_number != "":
+        links = [i for i in links if song_number in i]
 
     return links
 
@@ -31,15 +34,14 @@ def get_song_key(song_name: str):
 
     return data
 
-def get_song_data(song_name: str, result_num: int = 1):
-    if result_num > 10:
-        raise ValueError("Result number cannot be greater than 10")
-
+def get_song_data(song_name: str, result_num: str = ""):
     query = song_name
 
-    result = search(query)
+    print(song_name, ''.join(query.split('-')[0: -2]))
 
-    song_url = result[0]
+    result = search(''.join(query.split('-')[0: -2]), result_num)
+
+    song_url = [i for i in result if result_num in i][0]
 
     answer = requests.get(song_url)
 
@@ -104,7 +106,10 @@ def get_song_chords(song_name: str):
             print("No results found")
             break
 
-        data = get_song_data(song_name)
+        # Number at the end of songname
+        song_name_number = song_name.split(" ")[-1]
+
+        data = get_song_data(song_name, song_name_number)
 
         # Extract the song's chord progressions
         progressions = extract_chords(
