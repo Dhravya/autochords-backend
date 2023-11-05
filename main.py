@@ -57,6 +57,8 @@ def split_chord(chord):
 
     if chord_type == 'm':
         chord_type = 'minor'
+    elif chord_type == '':
+        chord_type = 'major'
 
     return base_chord.replace("/", ""), chord_type
 
