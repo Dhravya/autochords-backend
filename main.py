@@ -45,7 +45,7 @@ def split_chord(chord):
 
     # Find the base chord and the chord type
     base_chord = None
-    chord_type = ''
+    chord_type = 'major'
 
     # Loop through each base chord to find the base chord in the input chord
     for base in BASE_CHORDS:
@@ -54,10 +54,6 @@ def split_chord(chord):
             # Anything after the base chord is considered the chord type
             chord_type = chord[len(base):]
             break
-
-    # If no base chord was found, return the original chord as the type
-    if not base_chord:
-        chord_type = 'major'
 
     if chord_type == 'm':
         chord_type = 'minor'
