@@ -34,7 +34,7 @@ app.add_middleware(
 def split_chord(chord):
     # Define a list of base chords, sorted by length in descending order so that chords with the longer names are matched first
     BASE_CHORDS = sorted(
-        ["C", "Csharp", "D", "Eb", "E", "F", "Fsharp", "G", "Gsharp", "Ab", "A", "B", "Bb"],
+        ["C", "Csharp", "D", "Dsharp", "Eb", "E", "F", "Fsharp", "G","Gsharp", "Ab", "A", "Asharp", "B", "Bb"],
         key=len,
         reverse=True
     )
@@ -62,7 +62,9 @@ def split_chord(chord):
         chord_type = 'minor'
     elif chord_type in ['', 'maj', 'M']:
         chord_type = 'major'
+
     # Other chord types like diminished, augmented, etc., could be added here
+    base_chord.replace("Csharp", "D").replace("Dsharp", "Eb").replace("Fsharp", "G").replace("Gsharp", "Ab").replace("Asharp", "Bb")
 
     return base_chord, chord_type
 
@@ -142,7 +144,6 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
     progressions = extract_chords(final_chords)
     for section, chords in progressions.items():
         for chord in chords:
-
 
             chord_name, chord_type = split_chord(chord)
             
