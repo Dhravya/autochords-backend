@@ -4,7 +4,6 @@ import re
 import json
 
 def search(term):
-    print(term)
     escaped_term = term.replace(" ", "+")
 
     url ="https://www.ultimate-guitar.com/search.php?search_type=title&order=&value=" + escaped_term
@@ -38,8 +37,6 @@ def get_song_data(song_name: str, result_num: str = ""):
     without_number = ' '.join(query.split("-")[0: -1])
 
     result = search(without_number)
-
-    print(result)
 
     song_url = [i for i in result if result_num in i]
 
@@ -113,7 +110,6 @@ def get_song_chords(song_name: str):
 
         # Number at the end of songname
         song_name_number = song_name.split("-")[-1]
-        print(song_name_number)
 
         data = get_song_data(song_name, song_name_number)
 
@@ -136,7 +132,6 @@ def get_song_chords(song_name: str):
             got_results = True
 
         current_try += 1
-        print(current_try)
 
     return None
 

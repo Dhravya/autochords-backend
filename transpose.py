@@ -86,6 +86,7 @@ def get_key_from_index(index, to_key):
 
 def get_transponation_steps(source_key, target_key):
     """Gets the number of half tones to transpose"""
+    print("source and target ", source_key, target_key)
     root_source = key_regex.match(source_key).group()
     root_target = key_regex.match(target_key).group()
 

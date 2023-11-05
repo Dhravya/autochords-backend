@@ -74,12 +74,8 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
         key = cursor.fetchone()[0]
 
     song_name_number = song_name.split("-")[-1]
-    print(song_name_number)
     song = get_song_data(song_name, song_name_number)
 
-    with open("song.json", "w") as f:
-        import json
-        json.dump(song, f, indent=2)
 
     if song is None:
         return JSONResponse(
@@ -87,21 +83,21 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
             status_code=400,
         )
 
-    print(song)
-
     original_chords = song["store"]["page"]["data"]["tab_view"]["wiki_tab"]["content"]
    
 
     final_chords = original_chords
 
     progressions = extract_chords(original_chords)
-    print(progressions)
+
+    if len(progressions.keys()) == 0:
+        return JSONResponse(
+            content={"error": "Song not found. Please try again with a different song."},
+            status_code=400,
+        )
 
     original_key = None
 
-    # First occurance of a chord in the progressions recursively
-    # {'Coda': [], 'Intro': ['G']
-    # Here, the first occurance of a chord is G
 
     for section, chords in progressions.items():
         if len(chords) > 0:
@@ -226,7 +222,6 @@ async def upload_song(file: UploadFile = UploadFile(...), user_email: str = Quer
     y_harmonic, y_percussive = librosa.effects.hpss(y)
     unebarque_fsharp_maj = Tonal_Fragment(y_harmonic, sr, tend=22)
 
-    print(user_email)
 
     cursor.execute(
         f"SELECT user_key FROM user WHERE email='{user_email}'"
@@ -313,8 +308,6 @@ if __name__ == "__main__":
     # recording = record_audio()
 
     # song = get_user_chords(song_name, 'recording')
-
-    # print(song)
 
     import uvicorn
 
