@@ -17,7 +17,7 @@ def search(term):
 
 def get_song_key(song_name: str):
     query = song_name + "site:songbpm.com"
-    result = search(query, num_results=1, lang="en")
+    result = search(query)
 
     result = next(result)
 
@@ -35,9 +35,9 @@ def get_song_data(song_name: str, result_num: int = 1):
     if result_num > 10:
         raise ValueError("Result number cannot be greater than 10")
 
-    query = song_name + " site:tabs.ultimate-guitar.com"
+    query = song_name
 
-    result = search(query, num_results=result_num, lang="en")
+    result = search(query)
 
     for i in result:
         song_url = i

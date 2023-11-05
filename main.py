@@ -146,7 +146,7 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
 @app.get("/search_results")
 async def search_results(song_name: str = Query(...)):
     results = search(
-        song_name + " site:tabs.ultimate-guitar.com", num_results=5, lang="en"
+        song_name
     )
 
     results = list(results)
