@@ -59,7 +59,7 @@ def split_chord(chord):
     if not base_chord:
         chord_type = chord
 
-    return base_chord, chord_type
+    return base_chord.replace("/", ""), chord_type
 
 
 @app.get("/get_chords")
