@@ -8,10 +8,10 @@ ENV PYTHONUNBUFFERED 1
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
+RUN apt-get update && apt-get install -y libsndfile1
 # Install FFmpeg
-RUN apt-get install -y ffmpeg \
-    && apt-get install -y libsndfile1 \
-    && pip install audioread \
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the current directory contents into the container at the working directory
