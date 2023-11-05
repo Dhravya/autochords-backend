@@ -127,6 +127,20 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
 
     song_images = []
 
+
+    if key:
+        transposed_chords = transpose_progressions(
+            progressions, original_key, key
+        )
+
+        updated_chords = replace_chords_with_transposed(
+            original_chords, progressions, transposed_chords
+        )
+
+        final_chords = updated_chords
+
+
+    progressions = extract_chords(final_chords)
     for section, chords in progressions.items():
         for chord in chords:
 
@@ -141,17 +155,6 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
             }   
 
             song_images.append(object)
-
-    if key:
-        transposed_chords = transpose_progressions(
-            progressions, original_key, key
-        )
-
-        updated_chords = replace_chords_with_transposed(
-            original_chords, progressions, transposed_chords
-        )
-
-        final_chords = updated_chords
 
     
     # Get the unique values of song_images list
