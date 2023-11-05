@@ -1,0 +1,8 @@
+librosa
+fastapi
+googlesearch
+beautifulsoup4
+numpy
+matplotlib
+pymyql
+uvicorn
