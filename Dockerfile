@@ -8,9 +8,7 @@ ENV PYTHONUNBUFFERED 1
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
-RUN apt-get update && \
-    apt-get install -y libsndfile1-dev && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get install -y libsndfile1-dev
 
 # Install FFmpeg
 RUN apt-get install -y \
