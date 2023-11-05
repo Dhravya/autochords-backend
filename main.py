@@ -32,8 +32,12 @@ app.add_middleware(
 
 
 def split_chord(chord):
-    # Define a list of base chords
-    BASE_CHORDS = ["C", "Csharp", "D", "Eb", "E", "F", "Fsharp", "G", "Ab", "A", "B", "Bb"]
+    # Define a list of base chords, sorted by length in descending order so that chords with the longer names are matched first
+    BASE_CHORDS = sorted(
+        ["C", "Csharp", "D", "Eb", "E", "F", "Fsharp", "G", "Gsharp", "Ab", "A", "B", "Bb"],
+        key=len,
+        reverse=True
+    )
 
     # Handle the slash chords by taking only the part before the slash
     chord = chord.split('/')[0]
@@ -53,13 +57,14 @@ def split_chord(chord):
             chord_type = chord[len(base):]
             break
 
-    if chord_type == 'm':
+    # Assign chord type based on the suffix
+    if chord_type in ['m', 'min']:
         chord_type = 'minor'
-    elif chord_type == '' or chord_type == 'maj' or chord_type == 'M':
+    elif chord_type in ['', 'maj', 'M']:
         chord_type = 'major'
+    # Other chord types like diminished, augmented, etc., could be added here
 
-    return base_chord.replace("/", ""), chord_type
-
+    return base_chord, chord_type
 
 @app.get("/get_chords")
 async def get_chords(song_name: str = Query(...), username: str = Query(...)):
