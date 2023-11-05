@@ -4,6 +4,6 @@ googlesearch-python
 beautifulsoup4
 numpy
 matplotlib
-pymyql
+pymysql
 uvicorn
 python-dotenv
