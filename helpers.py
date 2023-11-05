@@ -13,9 +13,6 @@ def search(term, song_number: str = ""):
 
     links = [i.replace("&quot;", "") for i in links][0:5]
 
-    if song_number != "":
-        links = [i for i in links if song_number in i]
-
     return links
 
 def get_song_key(song_name: str):
@@ -37,9 +34,9 @@ def get_song_key(song_name: str):
 def get_song_data(song_name: str, result_num: str = ""):
     query = song_name
 
-    print(song_name, ''.join(query.split('-')[0: -2]))
+    without_number = ''.join(query.split("-")[0: -1])
 
-    result = search(''.join(query.split('-')[0: -2]), result_num)
+    result = search(without_number, result_num)
 
     song_url = [i for i in result if result_num in i][0]
 
@@ -107,7 +104,8 @@ def get_song_chords(song_name: str):
             break
 
         # Number at the end of songname
-        song_name_number = song_name.split(" ")[-1]
+        song_name_number = song_name.split("-")[-1]
+        print(song_name_number)
 
         data = get_song_data(song_name, song_name_number)
 
