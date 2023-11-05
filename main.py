@@ -35,7 +35,7 @@ app.add_middleware(
 
 def split_chord(chord):
     # Define a list of base chords
-    BASE_CHORDS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+    BASE_CHORDS = ["C", "Csharp", "D", "Eb", "E", "F", "Fsharp", "G", "Ab", "A", "B"]
 
     # Handle the slash chords by taking only the part before the slash
     chord = chord.split('/')[0]
@@ -112,6 +112,7 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
 
     for section, chords in progressions.items():
         for chord in chords:
+
 
             chord_name, chord_type = split_chord(chord)
             
