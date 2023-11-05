@@ -74,6 +74,13 @@ async def get_chords(song_name: str = Query(...), username: str = Query(...)):
     song_name_number = song_name.split("-")[-1]
     print(song_name_number)
     song = get_song_data(song_name, song_name_number)
+
+    if song is None:
+        return JSONResponse(
+            content={"error": "Song not found. Please try again with a different song."},
+            status_code=400,
+        )
+
     print(song)
 
     original_chords = song["store"]["page"]["data"]["tab_view"]["wiki_tab"]["content"]

@@ -41,7 +41,12 @@ def get_song_data(song_name: str, result_num: str = ""):
 
     print(result)
 
-    song_url = [i for i in result if result_num in i][0]
+    song_url = [i for i in result if result_num in i]
+
+    if len(song_url) == 0:
+        return None
+    
+    song_url = song_url[0]
 
     answer = requests.get(song_url)
 
