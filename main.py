@@ -259,6 +259,54 @@ async def get_user_key(user_email: str):
     return JSONResponse(content={"key": cursor.fetchone()[0]}, status_code=200)
 
 
+@app.get("/save_song")
+async def save_song(song_url: str, user_email: str):
+    cursor.execute(f"SELECT user_key FROM user WHERE email='{user_email}'")
+
+    if cursor.rowcount == 0:
+        return JSONResponse(content={"error": "User not found"}, status_code=400)
+
+    user_key = cursor.fetchone()[0]
+
+    song_name = song_url.split("/")[-1].split("-")[:-1]
+    song_name = "-".join(song_name)
+
+    cursor.execute(
+        f"SELECT * FROM songs WHERE song_name='{song_name}' AND email='{user_email}'"
+    )
+
+    if cursor.rowcount == 0:
+        cursor.execute(
+            f"INSERT INTO songs (song_name, song_url, email) VALUES ('{song_name}', '{song_url}', '{user_email}')"
+        )
+    else:
+        cursor.execute(
+            f"UPDATE songs SET song_url='{song_url}' WHERE song_name='{song_name}' AND email='{user_email}'"
+        )
+
+    connection.commit()
+
+    return JSONResponse(content={"message": "Song saved successfully"}, status_code=200)
+
+@app.get("/get_saved_songs")
+async def get_saved_songs(user_email: str):
+    cursor.execute(f"SELECT * FROM songs WHERE email='{user_email}'")
+
+    if cursor.rowcount == 0:
+        return JSONResponse(content={"error": "User not found"}, status_code=400)
+
+    songs = cursor.fetchall()
+
+    songs = [
+        {
+            "song_name": song[0],
+            "song_url": song[1],
+            "email": song[2]
+        } for song in songs
+    ]
+
+    return JSONResponse(content={"songs": songs}, status_code=200)
+
 if __name__ == "__main__":
     # song_name = input("Enter song name: ")
 
