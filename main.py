@@ -229,8 +229,19 @@ async def upload_song(file: UploadFile = UploadFile(...), user_email: str = Quer
     print(user_email)
 
     cursor.execute(
-        f"INSERT INTO user (email, user_key) VALUES ('{user_email}', '{unebarque_fsharp_maj.get_max_key()}')"
+        f"SELECT user_key FROM user WHERE email='{user_email}'"
     )
+    result = cursor.fetchone()
+
+    if result is None:
+        cursor.execute(
+            f"INSERT INTO user (email, user_key) VALUES ('{user_email}', '{unebarque_fsharp_maj.get_max_key()}')"
+        )
+    else:
+        cursor.execute(
+            f"UPDATE user SET user_key='{unebarque_fsharp_maj.get_max_key()}' WHERE email='{user_email}'"
+        )
+
     connection.commit()
 
     return JSONResponse(
