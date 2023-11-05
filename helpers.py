@@ -3,7 +3,8 @@ from bs4 import BeautifulSoup
 import re
 import json
 
-def search(term, song_number: str = ""):
+def search(term):
+    print(term)
     escaped_term = term.replace(" ", "+")
 
     url ="https://www.ultimate-guitar.com/search.php?search_type=title&order=&value=" + escaped_term
@@ -34,9 +35,11 @@ def get_song_key(song_name: str):
 def get_song_data(song_name: str, result_num: str = ""):
     query = song_name
 
-    without_number = ''.join(query.split("-")[0: -1])
+    without_number = ' '.join(query.split("-")[0: -1])
 
-    result = search(without_number, result_num)
+    result = search(without_number)
+
+    print(result)
 
     song_url = [i for i in result if result_num in i][0]
 
