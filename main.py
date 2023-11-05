@@ -35,7 +35,7 @@ app.add_middleware(
 
 def split_chord(chord):
     # Define a list of base chords
-    BASE_CHORDS = ["C", "Csharp", "D", "Eb", "E", "F", "Fsharp", "G", "Ab", "A", "B"]
+    BASE_CHORDS = ["C", "Csharp", "D", "Eb", "E", "F", "Fsharp", "G", "Ab", "A", "B", "Bb"]
 
     # Handle the slash chords by taking only the part before the slash
     chord = chord.split('/')[0]
