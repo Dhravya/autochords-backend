@@ -1,7 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import pyaudio
-import wave
 import re
 import json
 from googlesearch import search
@@ -22,47 +20,6 @@ def get_song_key(song_name: str):
     data = data.text
 
     return data
-
-
-def record_audio():
-    FORMAT = pyaudio.paInt16
-    CHANNELS = 1
-    RATE = 44100
-    CHUNK = 1024
-    RECORD_SECONDS = 10
-    OUTPUT_FILENAME = "recording.wav"
-
-    audio = pyaudio.PyAudio()
-
-    # Start recording
-    stream = audio.open(
-        format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK
-    )
-    print("Recording...")
-
-    frames = []
-
-    for _ in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-        data = stream.read(CHUNK)
-        frames.append(data)
-
-    print("Finished recording.")
-
-    # Stop recording
-    stream.stop_stream()
-    stream.close()
-    audio.terminate()
-
-    # Save the recording as a WAV file
-    with wave.open(OUTPUT_FILENAME, "wb") as wf:
-        wf.setnchannels(CHANNELS)
-        wf.setsampwidth(audio.get_sample_size(FORMAT))
-        wf.setframerate(RATE)
-        wf.writeframes(b"".join(frames))
-
-    print(f"Recording saved to {OUTPUT_FILENAME}")
-    return True
-
 
 def get_song_data(song_name: str, result_num: int = 1):
     if result_num > 10:
