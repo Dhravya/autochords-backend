@@ -57,7 +57,10 @@ def split_chord(chord):
 
     # If no base chord was found, return the original chord as the type
     if not base_chord:
-        chord_type = chord
+        chord_type = 'major'
+
+    if chord_type == 'm':
+        chord_type = 'minor'
 
     return base_chord.replace("/", ""), chord_type
 
