@@ -1,8 +1,9 @@
 librosa
 fastapi
-googlesearch
+googlesearch-python
 beautifulsoup4
 numpy
 matplotlib
 pymyql
 uvicorn
+python-dotenv
